@@ -1,0 +1,5 @@
+﻿  shader.cpp
+c:\users\jarrett\source\repos\igme.309.04\include\opengl-tutorials\shader.cpp(110): fatal error C1010: unexpected end of file while looking for precompiled header. Did you forget to add '#include "pch.h"' to your source?
+  main.cpp
+c:\users\jarrett\source\repos\igme.309.04\e02 - visual studio 2017 glfw configuration\main.cpp(111): fatal error C1010: unexpected end of file while looking for precompiled header. Did you forget to add '#include "pch.h"' to your source?
+  Generating Code...
