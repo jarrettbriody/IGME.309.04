@@ -156,8 +156,8 @@ copy "$(SolutionDir)include\GL\bin\*.*""$(SolutionDir)_Binary\"</Command>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\Desktop\E02_-_VS17_GLFW_Config_Required_Files\Main.cpp" />
     <ClCompile Include="..\include\OpenGL-Tutorials\shader.cpp" />
+    <ClCompile Include="Main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\OpenGL-Tutorials\shader.hpp" />
