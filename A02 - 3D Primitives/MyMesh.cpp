@@ -280,6 +280,7 @@ void MyMesh::GenerateCone(float a_fRadius, float a_fHeight, int a_nSubdivisions,
 	vector3 bottomCenterPoint = vector3(0, -1.0f * (a_fHeight / 2.0f), 0);
 	for (size_t i = 0; i < a_nSubdivisions; i++)
 	{
+		//create the two necessary angles to get the two points needed for each face of the cone, calculate the points based on the height and radius and draw a circle at the bottom
 		float angle1 = ((glm::two_pi<float>()) / a_nSubdivisions) * i;
 		float angle2 = ((glm::two_pi<float>()) / a_nSubdivisions) * (i + 1);
 		vector3 point1 = vector3(glm::cos(angle1) * a_fRadius, -1.0f * (a_fHeight / 2.0f), glm::sin(angle1) * a_fRadius);
@@ -315,6 +316,7 @@ void MyMesh::GenerateCylinder(float a_fRadius, float a_fHeight, int a_nSubdivisi
 	vector3 bottomCenterPoint = vector3(0, -1.0f * (a_fHeight / 2.0f), 0);
 	for (size_t i = 0; i < a_nSubdivisions; i++)
 	{
+		//create the two angles needed to get the four points for each slice of the cylinder, then calculate the points based on height and radius
 		float angle1 = ((glm::two_pi<float>()) / a_nSubdivisions) * i;
 		float angle2 = ((glm::two_pi<float>()) / a_nSubdivisions) * (i + 1);
 		vector3 point1 = vector3(glm::cos(angle1) * a_fRadius, (a_fHeight / 2.0f), glm::sin(angle1) * a_fRadius);
@@ -353,9 +355,9 @@ void MyMesh::GenerateTube(float a_fOuterRadius, float a_fInnerRadius, float a_fH
 	Release();
 	Init();
 
-	// Replace this with your code
 	for (size_t i = 0; i < a_nSubdivisions; i++)
 	{
+		//create two angles needed to get the eight points for each cross section of the tube, calculate the angles based on their respective radii and the height of the tube
 		float angle1 = ((glm::two_pi<float>()) / a_nSubdivisions) * i;
 		float angle2 = ((glm::two_pi<float>()) / a_nSubdivisions) * (i + 1);
 		vector3 point1 = vector3(glm::cos(angle1) * a_fInnerRadius, (a_fHeight / 2.0f), glm::sin(angle1) * a_fInnerRadius);
@@ -372,7 +374,6 @@ void MyMesh::GenerateTube(float a_fOuterRadius, float a_fInnerRadius, float a_fH
 		AddQuad(point7, point8, point6, point5);
 		AddQuad(point5, point8, point1, point4);
 	}
-	// -------------------------------
 
 	// Adding information about color
 	CompleteMesh(a_v3Color);
@@ -402,23 +403,31 @@ void MyMesh::GenerateTorus(float a_fOuterRadius, float a_fInnerRadius, int a_nSu
 	Release();
 	Init();
 
-	// Replace this with your code
+	//for each of the subdivisions that will represent sectors with respect to the origin
 	for (size_t i = 0; i < a_nSubdivisionsA; i++)
 	{
+		//get angles from origin to the sections of the torus
 		float angleA1 = ((glm::two_pi<float>()) / a_nSubdivisionsA) * i;
 		float angleA2 = ((glm::two_pi<float>()) / a_nSubdivisionsA) * (i + 1);
+
+		//get the radius in between both the inner and outer
 		float middleRadius = a_fInnerRadius + ((a_fOuterRadius - a_fInnerRadius) / 2);
+
+		//for each of the subdivisions that will represent quads around the central axis for each sector
 		for (size_t j = 0; j < a_nSubdivisionsB; j++)
 		{
+			//calculate the current two angles within the sector to ultimately get four points
 			float angleB1 = ((glm::two_pi<float>()) / a_nSubdivisionsB) * j;
 			float angleB2 = ((glm::two_pi<float>()) / a_nSubdivisionsB) * (j + 1);
 
+			//get the center of the first sector, then get the axis we will be rotating on, then calculate the first two rotated vectors on that on angle
 			vector3 currentMidPoint1 = vector3(glm::cos(angleA1) * middleRadius, 0, glm::sin(angleA1) * middleRadius);
 			vector3 currentMidPointNorm1 = glm::normalize(currentMidPoint1);
 			vector3 axisOfRot1 = vector3(-currentMidPointNorm1.z, currentMidPointNorm1.y, currentMidPointNorm1.x);
 			vector3 rotatedVector1 = currentMidPointNorm1 * glm::cos(angleB1) + glm::cross(axisOfRot1, currentMidPointNorm1) * glm::sin(angleB1) + axisOfRot1 * glm::dot(axisOfRot1, currentMidPointNorm1) * (1 - glm::cos(angleB1));
 			vector3 rotatedVector2 = currentMidPointNorm1 * glm::cos(angleB2) + glm::cross(axisOfRot1, currentMidPointNorm1) * glm::sin(angleB2) + axisOfRot1 * glm::dot(axisOfRot1, currentMidPointNorm1) * (1 - glm::cos(angleB2));
 
+			//get the center of the second sector, then get the axis we will be rotating on, then calculate the first two rotated vectors on that on angle
 			vector3 currentMidPoint2 = vector3(glm::cos(angleA2) * middleRadius, 0, glm::sin(angleA2) * middleRadius);
 			vector3 currentMidPointNorm2 = glm::normalize(currentMidPoint2);
 			vector3 axisOfRot2 = vector3(-currentMidPointNorm2.z, currentMidPointNorm2.y, currentMidPointNorm2.x);
@@ -451,30 +460,42 @@ void MyMesh::GenerateSphere(float a_fRadius, int a_nSubdivisions, vector3 a_v3Co
 	Release();
 	Init();
 
-	// Replace this with your code
 	vector3 topCenterPoint = vector3(0, a_fRadius, 0);
 	vector3 bottomCenterPoint = vector3(0, -1.0f * a_fRadius, 0);
+
+	//for each subdivision going from +y to -y
 	for (size_t i = 1; i < a_nSubdivisions; i++)
 	{
+		//get the y value based on the radius of the sphere and the current y subdivision
 		float y1 = glm::sin(glm::pi<float>() / 2 - glm::pi<float>() / a_nSubdivisions * i) * a_fRadius;
 		float y2 = glm::sin(glm::pi<float>() / 2 - glm::pi<float>() / a_nSubdivisions * (i + 1)) * a_fRadius;
+
+		//get the radius at that subdivision based on the radius of the sphere and the current y subdivision
 		float r1 = glm::cos(glm::pi<float>() / 2 - glm::pi<float>() / a_nSubdivisions * i) * a_fRadius;
 		float r2 = glm::cos(glm::pi<float>() / 2 - glm::pi<float>() / a_nSubdivisions * (i + 1)) * a_fRadius;
+
+		//for each face intersecting the x-z plane for whatever y subdivision
 		for (size_t j = 0; j < a_nSubdivisions; j++)
 		{
+			//calculate the two necessary angles to ultimately get four points for a face
 			float angle1 = ((glm::two_pi<float>()) / a_nSubdivisions) * j;
 			float angle2 = ((glm::two_pi<float>()) / a_nSubdivisions) * (j + 1);
 
+			//if this is the first y subdivision, tris need to be made with the top center point rather than quads
 			if (i == 1) {
 				vector3 point1 = vector3(glm::cos(angle1) * r1, y1, glm::sin(angle1) * r1);
 				vector3 point2 = vector3(glm::cos(angle2) * r1, y1, glm::sin(angle2) * r1);
 				AddTri(topCenterPoint, point1, point2);
 			}
+
+			//same if it is the last
 			if (i == a_nSubdivisions - 1) {
 				vector3 point1 = vector3(glm::cos(angle1) * r1, y1, glm::sin(angle1) * r1);
 				vector3 point2 = vector3(glm::cos(angle2) * r1, y1, glm::sin(angle2) * r1);
 				AddTri(bottomCenterPoint, point2, point1);
 			}
+
+			//otherwise just make four points and make a quad
 			else {
 				vector3 point1 = vector3(glm::cos(angle1) * r1, y1, glm::sin(angle1) * r1);
 				vector3 point2 = vector3(glm::cos(angle1) * r2, y2, glm::sin(angle1) * r2);
