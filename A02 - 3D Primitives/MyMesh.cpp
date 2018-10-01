@@ -1,4 +1,5 @@
 #include "MyMesh.h"
+#include <vector>
 void MyMesh::Init(void)
 {
 	m_bBinded = false;
@@ -274,9 +275,19 @@ void MyMesh::GenerateCone(float a_fRadius, float a_fHeight, int a_nSubdivisions,
 
 	Release();
 	Init();
-
 	// Replace this with your code
-	GenerateCube(a_fRadius * 2.0f, a_v3Color);
+	vector3 topPoint = vector3(0, a_fHeight / 2.0f, 0);
+	vector3 bottomCenterPoint = vector3(0, -1.0f * (a_fHeight / 2.0f), 0);
+	for (size_t i = 0; i < a_nSubdivisions; i++)
+	{
+		float angle1 = ((glm::two_pi<float>()) / a_nSubdivisions) * i;
+		float angle2 = ((glm::two_pi<float>()) / a_nSubdivisions) * (i + 1);
+		vector3 point1 = vector3(glm::cos(angle1) * a_fRadius, -1.0f * (a_fHeight / 2.0f), glm::sin(angle1) * a_fRadius);
+		vector3 point2 = vector3(glm::cos(angle2) * a_fRadius, -1.0f * (a_fHeight / 2.0f), glm::sin(angle2) * a_fRadius);
+		AddTri(topPoint,point2, point1);
+		AddTri(bottomCenterPoint, point1, point2);
+	}
+
 	// -------------------------------
 
 	// Adding information about color
@@ -300,7 +311,20 @@ void MyMesh::GenerateCylinder(float a_fRadius, float a_fHeight, int a_nSubdivisi
 	Init();
 
 	// Replace this with your code
-	GenerateCube(a_fRadius * 2.0f, a_v3Color);
+	vector3 topCenterPoint = vector3(0, a_fHeight / 2.0f, 0);
+	vector3 bottomCenterPoint = vector3(0, -1.0f * (a_fHeight / 2.0f), 0);
+	for (size_t i = 0; i < a_nSubdivisions; i++)
+	{
+		float angle1 = ((glm::two_pi<float>()) / a_nSubdivisions) * i;
+		float angle2 = ((glm::two_pi<float>()) / a_nSubdivisions) * (i + 1);
+		vector3 point1 = vector3(glm::cos(angle1) * a_fRadius, (a_fHeight / 2.0f), glm::sin(angle1) * a_fRadius);
+		vector3 point2 = vector3(glm::cos(angle2) * a_fRadius, (a_fHeight / 2.0f), glm::sin(angle2) * a_fRadius);
+		vector3 point3 = vector3(glm::cos(angle1) * a_fRadius, -1.0f * (a_fHeight / 2.0f), glm::sin(angle1) * a_fRadius);
+		vector3 point4 = vector3(glm::cos(angle2) * a_fRadius, -1.0f * (a_fHeight / 2.0f), glm::sin(angle2) * a_fRadius);
+		AddTri(topCenterPoint, point2, point1);
+		AddTri(bottomCenterPoint, point3, point4);
+		AddQuad(point1, point2, point3, point4);
+	}
 	// -------------------------------
 
 	// Adding information about color
@@ -330,7 +354,24 @@ void MyMesh::GenerateTube(float a_fOuterRadius, float a_fInnerRadius, float a_fH
 	Init();
 
 	// Replace this with your code
-	GenerateCube(a_fOuterRadius * 2.0f, a_v3Color);
+	for (size_t i = 0; i < a_nSubdivisions; i++)
+	{
+		float angle1 = ((glm::two_pi<float>()) / a_nSubdivisions) * i;
+		float angle2 = ((glm::two_pi<float>()) / a_nSubdivisions) * (i + 1);
+		vector3 point1 = vector3(glm::cos(angle1) * a_fInnerRadius, (a_fHeight / 2.0f), glm::sin(angle1) * a_fInnerRadius);
+		vector3 point2 = vector3(glm::cos(angle1) * a_fOuterRadius, (a_fHeight / 2.0f), glm::sin(angle1) * a_fOuterRadius);
+		vector3 point3 = vector3(glm::cos(angle2) * a_fOuterRadius, (a_fHeight / 2.0f), glm::sin(angle2) * a_fOuterRadius);
+		vector3 point4 = vector3(glm::cos(angle2) * a_fInnerRadius, (a_fHeight / 2.0f), glm::sin(angle2) * a_fInnerRadius);
+		vector3 point5 = vector3(glm::cos(angle1) * a_fInnerRadius, -1.0f * (a_fHeight / 2.0f), glm::sin(angle1) * a_fInnerRadius);
+		vector3 point6 = vector3(glm::cos(angle1) * a_fOuterRadius, -1.0f * (a_fHeight / 2.0f), glm::sin(angle1) * a_fOuterRadius);
+		vector3 point7 = vector3(glm::cos(angle2) * a_fOuterRadius, -1.0f * (a_fHeight / 2.0f), glm::sin(angle2) * a_fOuterRadius);
+		vector3 point8 = vector3(glm::cos(angle2) * a_fInnerRadius, -1.0f * (a_fHeight / 2.0f), glm::sin(angle2) * a_fInnerRadius);
+		
+		AddQuad(point2,point1,point3,point4);
+		AddQuad(point3,point7,point2,point6);
+		AddQuad(point7, point8, point6, point5);
+		AddQuad(point5, point8, point1, point4);
+	}
 	// -------------------------------
 
 	// Adding information about color
@@ -362,7 +403,31 @@ void MyMesh::GenerateTorus(float a_fOuterRadius, float a_fInnerRadius, int a_nSu
 	Init();
 
 	// Replace this with your code
-	GenerateCube(a_fOuterRadius * 2.0f, a_v3Color);
+	for (size_t i = 0; i < a_nSubdivisionsA; i++)
+	{
+		float angleA1 = ((glm::two_pi<float>()) / a_nSubdivisionsA) * i;
+		float angleA2 = ((glm::two_pi<float>()) / a_nSubdivisionsA) * (i + 1);
+		float middleRadius = a_fInnerRadius + ((a_fOuterRadius - a_fInnerRadius) / 2);
+		for (size_t j = 0; j < a_nSubdivisionsB; j++)
+		{
+			float angleB1 = ((glm::two_pi<float>()) / a_nSubdivisionsB) * j;
+			float angleB2 = ((glm::two_pi<float>()) / a_nSubdivisionsB) * (j + 1);
+
+			vector3 currentMidPoint1 = vector3(glm::cos(angleA1) * middleRadius, 0, glm::sin(angleA1) * middleRadius);
+			vector3 currentMidPointNorm1 = glm::normalize(currentMidPoint1);
+			vector3 axisOfRot1 = vector3(-currentMidPointNorm1.z, currentMidPointNorm1.y, currentMidPointNorm1.x);
+			vector3 rotatedVector1 = currentMidPointNorm1 * glm::cos(angleB1) + glm::cross(axisOfRot1, currentMidPointNorm1) * glm::sin(angleB1) + axisOfRot1 * glm::dot(axisOfRot1, currentMidPointNorm1) * (1 - glm::cos(angleB1));
+			vector3 rotatedVector2 = currentMidPointNorm1 * glm::cos(angleB2) + glm::cross(axisOfRot1, currentMidPointNorm1) * glm::sin(angleB2) + axisOfRot1 * glm::dot(axisOfRot1, currentMidPointNorm1) * (1 - glm::cos(angleB2));
+
+			vector3 currentMidPoint2 = vector3(glm::cos(angleA2) * middleRadius, 0, glm::sin(angleA2) * middleRadius);
+			vector3 currentMidPointNorm2 = glm::normalize(currentMidPoint2);
+			vector3 axisOfRot2 = vector3(-currentMidPointNorm2.z, currentMidPointNorm2.y, currentMidPointNorm2.x);
+			vector3 rotatedVector3 = currentMidPointNorm2 * glm::cos(angleB1) + glm::cross(axisOfRot2, currentMidPointNorm2) * glm::sin(angleB1) + axisOfRot2 * glm::dot(axisOfRot2, currentMidPointNorm2) * (1 - glm::cos(angleB1));
+			vector3 rotatedVector4 = currentMidPointNorm2 * glm::cos(angleB2) + glm::cross(axisOfRot2, currentMidPointNorm2) * glm::sin(angleB2) + axisOfRot2 * glm::dot(axisOfRot2, currentMidPointNorm2) * (1 - glm::cos(angleB2));
+
+			AddQuad(currentMidPoint1 + rotatedVector1 * ((a_fOuterRadius - a_fInnerRadius) / 2), currentMidPoint1 + rotatedVector2 * ((a_fOuterRadius - a_fInnerRadius) / 2), currentMidPoint2 + rotatedVector3 * ((a_fOuterRadius - a_fInnerRadius) / 2), currentMidPoint2 + rotatedVector4 * ((a_fOuterRadius - a_fInnerRadius) / 2));
+		}
+	}
 	// -------------------------------
 
 	// Adding information about color
@@ -380,14 +445,45 @@ void MyMesh::GenerateSphere(float a_fRadius, int a_nSubdivisions, vector3 a_v3Co
 		GenerateCube(a_fRadius * 2.0f, a_v3Color);
 		return;
 	}
-	if (a_nSubdivisions > 6)
-		a_nSubdivisions = 6;
+	if (a_nSubdivisions > 360)
+		a_nSubdivisions = 360;
 
 	Release();
 	Init();
 
 	// Replace this with your code
-	GenerateCube(a_fRadius * 2.0f, a_v3Color);
+	vector3 topCenterPoint = vector3(0, a_fRadius, 0);
+	vector3 bottomCenterPoint = vector3(0, -1.0f * a_fRadius, 0);
+	for (size_t i = 1; i < a_nSubdivisions; i++)
+	{
+		float y1 = glm::sin(glm::pi<float>() / 2 - glm::pi<float>() / a_nSubdivisions * i) * a_fRadius;
+		float y2 = glm::sin(glm::pi<float>() / 2 - glm::pi<float>() / a_nSubdivisions * (i + 1)) * a_fRadius;
+		float r1 = glm::cos(glm::pi<float>() / 2 - glm::pi<float>() / a_nSubdivisions * i) * a_fRadius;
+		float r2 = glm::cos(glm::pi<float>() / 2 - glm::pi<float>() / a_nSubdivisions * (i + 1)) * a_fRadius;
+		for (size_t j = 0; j < a_nSubdivisions; j++)
+		{
+			float angle1 = ((glm::two_pi<float>()) / a_nSubdivisions) * j;
+			float angle2 = ((glm::two_pi<float>()) / a_nSubdivisions) * (j + 1);
+
+			if (i == 1) {
+				vector3 point1 = vector3(glm::cos(angle1) * r1, y1, glm::sin(angle1) * r1);
+				vector3 point2 = vector3(glm::cos(angle2) * r1, y1, glm::sin(angle2) * r1);
+				AddTri(topCenterPoint, point1, point2);
+			}
+			if (i == a_nSubdivisions - 1) {
+				vector3 point1 = vector3(glm::cos(angle1) * r1, y1, glm::sin(angle1) * r1);
+				vector3 point2 = vector3(glm::cos(angle2) * r1, y1, glm::sin(angle2) * r1);
+				AddTri(bottomCenterPoint, point2, point1);
+			}
+			else {
+				vector3 point1 = vector3(glm::cos(angle1) * r1, y1, glm::sin(angle1) * r1);
+				vector3 point2 = vector3(glm::cos(angle1) * r2, y2, glm::sin(angle1) * r2);
+				vector3 point3 = vector3(glm::cos(angle2) * r2, y2, glm::sin(angle2) * r2);
+				vector3 point4 = vector3(glm::cos(angle2) * r1, y1, glm::sin(angle2) * r1);
+				AddQuad(point3, point4, point2, point1);
+			}
+		}
+	}
 	// -------------------------------
 
 	// Adding information about color
