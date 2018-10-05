@@ -97,8 +97,8 @@
       <Command>mkdir "$(SolutionDir)_Binary\"
 copy "$(OutDir)$(TargetName)$(TargetExt)" "$(SolutionDir)_Binary"
 mkdir "$(SolutionDir)_Binary\Shaders\"
-copy "$(SolutionDir)include\OpenGL-Tutorials\shaders\*.*""$(SolutionDir)_Binary\Shaders\"
-copy "$(SolutionDir)include\GL\bin\*.*""$(SolutionDir)_Binary\"</Command>
+copy "$(SolutionDir)include\OpenGL-Tutorials\shaders\*.*" "$(SolutionDir)_Binary\Shaders\"
+copy "$(SolutionDir)include\GL\bin\*.*" "$(SolutionDir)_Binary\"</Command>
     </PostBuildEvent>
     <PostBuildEvent>
       <Message>Copying binary...</Message>
@@ -134,8 +134,8 @@ copy "$(SolutionDir)include\GL\bin\*.*""$(SolutionDir)_Binary\"</Command>
       <Command>mkdir "$(SolutionDir)_Binary\"
 copy "$(OutDir)$(TargetName)$(TargetExt)" "$(SolutionDir)_Binary"
 mkdir "$(SolutionDir)_Binary\Shaders\"
-copy "$(SolutionDir)include\OpenGL-Tutorials\shaders\*.*""$(SolutionDir)_Binary\Shaders\"
-copy "$(SolutionDir)include\GL\bin\*.*""$(SolutionDir)_Binary\"</Command>
+copy "$(SolutionDir)include\OpenGL-Tutorials\shaders\*.*" "$(SolutionDir)_Binary\Shaders\"
+copy "$(SolutionDir)include\GL\bin\*.*" "$(SolutionDir)_Binary\"</Command>
     </PostBuildEvent>
     <PostBuildEvent>
       <Message>Copying binary...</Message>
