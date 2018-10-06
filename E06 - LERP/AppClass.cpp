@@ -57,9 +57,23 @@ void Application::Display(void)
 
 
 
-
 	//your code goes here
-	v3CurrentPos = vector3(0.0f, 0.0f, 0.0f);
+	const float timeBetween = 0.5f;
+	static int index1 = 0;
+	static int index2 = 1;
+	static float lastTime = 0;
+	if (fTimer - lastTime >= timeBetween) {
+		lastTime = fTimer;
+		index1++;
+		index2++;
+		if (index2 >= m_stopsList.size()) {
+			index2 = 0;
+		}
+		if (index1 >= m_stopsList.size()) {
+			index1 = 0;
+		}
+	}
+	v3CurrentPos = glm::lerp(m_stopsList[index1],m_stopsList[index2],(fTimer - lastTime) / timeBetween);
 	//-------------------
 	
 
