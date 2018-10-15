@@ -15,11 +15,18 @@ Date: 2017/05
 
 #include "ControllerConfiguration.h"
 #include "imgui\ImGuiObject.h"
+#include <fstream>
+#include <string>
+#include <sstream>
+#include "Loop.h"
+
+using namespace std;
 
 class Application
 {
 	uint m_uOrbits = 0; //number of shapes starting at 3 and increasing in sides
 	std::vector<uint> m_shapeList; //shape index for circles
+	Loop* loops = nullptr;
 	String m_sProgrammer = "Alberto Bobadilla - labigm@rit.edu";
 	
 private:
