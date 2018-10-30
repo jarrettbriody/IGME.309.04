@@ -24,6 +24,12 @@ matrix4 Simplex::MyCamera::GetProjectionMatrix(void) { return m_m4Projection; }
 
 matrix4 Simplex::MyCamera::GetViewMatrix(void) { CalculateViewMatrix(); return m_m4View; }
 
+vector3 Simplex::MyCamera::GetPosition(void) { return m_v3Position; }
+
+vector3 Simplex::MyCamera::GetTarget(void) { return m_v3Target; }
+
+vector3 Simplex::MyCamera::GetUp(void) { return m_v3Above; }
+
 Simplex::MyCamera::MyCamera()
 {
 	Init(); //Init the object with default values
@@ -129,7 +135,7 @@ void Simplex::MyCamera::SetPositionTargetAndUp(vector3 a_v3Position, vector3 a_v
 {
 	m_v3Position = a_v3Position;
 	m_v3Target = a_v3Target;
-	m_v3Above = a_v3Position + a_v3Upward;
+	m_v3Above = a_v3Upward;
 	CalculateProjectionMatrix();
 }
 
@@ -153,4 +159,71 @@ void Simplex::MyCamera::CalculateProjectionMatrix(void)
 										m_v2Vertical.x, m_v2Vertical.y, //vertical
 										m_v2NearFar.x, m_v2NearFar.y); //near and far
 	}
+}
+
+//move the camera in some direction at some speed
+void Simplex::MyCamera::Move(DIRECTION d, float spd)
+{
+	vector3 initPos = GetPosition();
+	vector3 direction = GetFront();
+	vector3 right = GetRight();
+
+	vector3 movement = vector3(0.0f,0.0f,0.0f);
+
+	//change movement vector based on the direction being moved in
+	switch (d) {
+	case FORWARD:
+		movement = direction * spd;
+		break;
+	case BACK:
+		movement = (-1) * direction * spd;
+		break;
+	case LEFT:
+		movement = (-1) * right * spd;
+		break;
+	case RIGHT:
+		movement = right * spd;
+		break;
+	case UP:
+		movement = vector3(0.0f, 1.0f, 0.0f) * spd;
+		break;
+	case DOWN:
+		movement = vector3(0.0f, -1.0f, 0.0f) * spd;
+		break;
+	default:
+		break;
+	}
+
+	//set the new pos and target based on how you are moving
+	SetPosition(initPos + movement);
+	SetTarget(GetTarget() + movement);
+}
+
+//calculate the forward vector based on the camera target and its current position
+vector3 Simplex::MyCamera::GetFront(void)
+{
+	return glm::normalize(GetTarget() - GetPosition());
+}
+
+//calculate the right vector based on the camera forward vector and its top vector
+vector3 Simplex::MyCamera::GetRight(void)
+{
+	return glm::normalize(glm::cross(GetFront(), m_v3Above));
+}
+
+//rotate the camera target some amount in the x and y
+void Simplex::MyCamera::Rotate(float x, float y)
+{
+	vector3 currentDir = GetFront();
+	//get the current angle
+	float currentX = glm::atan(currentDir.z, currentDir.x);
+	float currentY = glm::asin(currentDir.y);
+	//create a new direction vector based on the current angles and the amount being rotated
+	vector3 newDir = vector3(glm::cos(-x + currentX), glm::tan(currentY), glm::sin(-x + currentX));
+	//avoid gimbal lock by not allowing the camera to rotate over itself around its right axis
+	if (glm::degrees(currentY - y) > -89.0f && glm::degrees(currentY - y) < 89.0f) {
+		newDir.y = glm::tan(-y + currentY);
+	}
+	//set the new target
+	SetTarget(m_v3Position + glm::normalize(newDir));
 }

@@ -119,6 +119,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "E03 - OpenGL Shaders", "E03
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "E05 - Transformations", "E05 - Transformations\C11_TranslationAndScale.vcxproj", "{8D01F7DE-89EE-4CEA-8BEA-7CA1CD582BA6}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "A04 - Camera", "A04 - Camera\A04 - Camera.vcxproj", "{08A11DA8-4582-4AE0-90FE-929F44487E65}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -423,6 +425,12 @@ Global
 		{8D01F7DE-89EE-4CEA-8BEA-7CA1CD582BA6}.Release|x64.ActiveCfg = Release|Win32
 		{8D01F7DE-89EE-4CEA-8BEA-7CA1CD582BA6}.Release|x86.ActiveCfg = Release|Win32
 		{8D01F7DE-89EE-4CEA-8BEA-7CA1CD582BA6}.Release|x86.Build.0 = Release|Win32
+		{08A11DA8-4582-4AE0-90FE-929F44487E65}.Debug|x64.ActiveCfg = Debug|Win32
+		{08A11DA8-4582-4AE0-90FE-929F44487E65}.Debug|x86.ActiveCfg = Debug|Win32
+		{08A11DA8-4582-4AE0-90FE-929F44487E65}.Debug|x86.Build.0 = Debug|Win32
+		{08A11DA8-4582-4AE0-90FE-929F44487E65}.Release|x64.ActiveCfg = Release|Win32
+		{08A11DA8-4582-4AE0-90FE-929F44487E65}.Release|x86.ActiveCfg = Release|Win32
+		{08A11DA8-4582-4AE0-90FE-929F44487E65}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -476,6 +484,7 @@ Global
 		{B31E33AD-1AB7-4638-9F34-02492C4922CE} = {EE0E027C-366F-4685-94D5-0EA5F6870B1B}
 		{53B09650-0A42-4651-B7D2-080F3D517991} = {78C06654-E155-40A8-97F7-7BA1E50977C5}
 		{8D01F7DE-89EE-4CEA-8BEA-7CA1CD582BA6} = {78C06654-E155-40A8-97F7-7BA1E50977C5}
+		{08A11DA8-4582-4AE0-90FE-929F44487E65} = {EE0E027C-366F-4685-94D5-0EA5F6870B1B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A36545A6-DAAA-4856-BDB7-57C29F88BC6B}

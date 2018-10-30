@@ -10,6 +10,15 @@ Date: 2017/06
 namespace Simplex
 {
 
+enum DIRECTION {
+	FORWARD,
+	BACK,
+	LEFT,
+	RIGHT,
+	UP,
+	DOWN
+};
+
 class MyCamera
 {
 	vector3 m_v3Position = vector3(0.0f, 0.0f, 10.0f); //Where my camera is located
@@ -211,6 +220,14 @@ public:
 	OUTPUT: ---
 	*/
 	void CalculateProjectionMatrix(void);
+
+	void Move(DIRECTION d, float spd);
+
+	vector3 GetFront(void);
+
+	vector3 GetRight(void);
+
+	void Rotate(float x = 0.0f, float y = 0.0f);
 };
 
 } //namespace Simplex
