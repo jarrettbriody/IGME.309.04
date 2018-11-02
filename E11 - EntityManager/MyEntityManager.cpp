@@ -64,15 +64,30 @@ MyEntityManager::~MyEntityManager(){Release();};
 // other methods
 void Simplex::MyEntityManager::Update(void)
 {
-
+	for (auto i = m_entityList.begin(); i < m_entityList.end(); i++)
+	{
+		m_entityList[i].Update();
+	}
 }
 void Simplex::MyEntityManager::AddEntity(String a_sFileName, String a_sUniqueID)
 {
-
+	auto newEntity = new MyEntity(a_sFileName, a_sUniqueID);
+	m_entityList.push_back(newEntity);
+	m_uEntityCount++;
 }
 void Simplex::MyEntityManager::RemoveEntity(uint a_uIndex)
 {
-
+	int count = 0;
+	for (auto i = m_entityList.begin(); i < m_entityList.end(); i++)
+	{
+		if (count == a_uIndex) {
+			m_entityList.erase(i);
+			m_uEntityCount--;
+			return;
+		}
+		count++;
+	}
+	
 }
 void Simplex::MyEntityManager::RemoveEntity(String a_sUniqueID)
 {
