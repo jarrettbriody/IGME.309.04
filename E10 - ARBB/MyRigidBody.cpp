@@ -85,8 +85,33 @@ void MyRigidBody::SetModelMatrix(matrix4 a_m4ModelMatrix)
 	m_m4ToWorld = a_m4ModelMatrix;
 	
 	//your code goes here---------------------
-	m_v3MinG = m_v3MinL;
-	m_v3MaxG = m_v3MaxL;
+	vector3 bounds[] = {
+		vector3(m_m4ToWorld * vector4(m_v3MinL,1.0f)),
+		vector3(m_m4ToWorld * vector4(m_v3MinL.x,m_v3MinL.y, m_v3MaxL.z,1.0f)),
+		vector3(m_m4ToWorld * vector4(m_v3MaxL.x,m_v3MinL.y, m_v3MaxL.z,1.0f)),
+		vector3(m_m4ToWorld * vector4(m_v3MaxL.x,m_v3MinL.y, m_v3MinL.z,1.0f)),
+		vector3(m_m4ToWorld * vector4(m_v3MaxL,1.0f)),
+		vector3(m_m4ToWorld * vector4(m_v3MinL.x,m_v3MaxL.y, m_v3MaxL.z,1.0f)),
+		vector3(m_m4ToWorld * vector4(m_v3MaxL.x,m_v3MaxL.y, m_v3MaxL.z,1.0f)),
+		vector3(m_m4ToWorld * vector4(m_v3MaxL.x,m_v3MaxL.y, m_v3MinL.z,1.0f))
+
+	};
+
+	m_v3MinG = bounds[0];
+	m_v3MaxG = bounds[0];
+
+	for (int i = 1; i < 8; i++)
+	{
+		if (m_v3MinG.x > bounds[i].x) m_v3MinG.x = bounds[i].x;
+		if (m_v3MaxG.x < bounds[i].x) m_v3MaxG.x = bounds[i].x;
+
+		if (m_v3MinG.y > bounds[i].y) m_v3MinG.y = bounds[i].y;
+		if (m_v3MaxG.y < bounds[i].y) m_v3MaxG.y = bounds[i].y;
+
+		if (m_v3MinG.z > bounds[i].z) m_v3MinG.z = bounds[i].z;
+		if (m_v3MaxG.z < bounds[i].z) m_v3MaxG.z = bounds[i].z;
+	}
+
 	//----------------------------------------
 
 	//we calculate the distance between min and max vectors
