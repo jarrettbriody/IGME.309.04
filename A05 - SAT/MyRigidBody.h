@@ -38,6 +38,8 @@ class MyRigidBody
 
 	std::set<MyRigidBody*> m_CollidingRBSet; //set of rigid bodies this one is colliding with
 
+	vector3 v3Corner[8];
+
 public:
 	/*
 	Usage: Constructor
@@ -225,6 +227,8 @@ public:
 	Output: ---
 	*/
 	void SetModelMatrix(matrix4 a_m4ModelMatrix);
+
+	vector3* GetCorners(void);
 #pragma endregion
 	
 private:

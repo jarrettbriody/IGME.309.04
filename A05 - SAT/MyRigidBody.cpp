@@ -76,6 +76,7 @@ vector3 MyRigidBody::GetMinGlobal(void) { return m_v3MinG; }
 vector3 MyRigidBody::GetMaxGlobal(void) { return m_v3MaxG; }
 vector3 MyRigidBody::GetHalfWidth(void) { return m_v3HalfWidth; }
 matrix4 MyRigidBody::GetModelMatrix(void) { return m_m4ToWorld; }
+vector3* MyRigidBody::GetCorners(void) { return v3Corner; }
 void MyRigidBody::SetModelMatrix(matrix4 a_m4ModelMatrix)
 {
 	//to save some calculations if the model matrix is the same there is nothing to do here
@@ -86,7 +87,6 @@ void MyRigidBody::SetModelMatrix(matrix4 a_m4ModelMatrix)
 	m_m4ToWorld = a_m4ModelMatrix;
 
 	//Calculate the 8 corners of the cube
-	vector3 v3Corner[8];
 	//Back square
 	v3Corner[0] = m_v3MinL;
 	v3Corner[1] = vector3(m_v3MaxL.x, m_v3MinL.y, m_v3MinL.z);
@@ -286,6 +286,80 @@ uint MyRigidBody::SAT(MyRigidBody* const a_pOther)
 	Simplex that might help you [eSATResults] feel free to use it.
 	(eSATResults::SAT_NONE has a value of 0)
 	*/
+
+	for (size_t i = 0; i < 6; i++)
+	{
+		//get the vector you are projecting onto corresponding to the x y or z of the creeper or steve
+		vector3 projectionVector;
+		switch (i) {
+		case 0:
+			projectionVector = glm::normalize(vector3(m_m4ToWorld * vector4(AXIS_X, 0)));
+			break;
+		case 1:
+			projectionVector = glm::normalize(vector3(m_m4ToWorld * vector4(AXIS_Y, 0)));
+			break;
+		case 2:
+			projectionVector = glm::normalize(vector3(m_m4ToWorld * vector4(AXIS_Z, 0)));
+			break;
+		case 3:
+			projectionVector = glm::normalize(vector3(a_pOther->GetModelMatrix() * vector4(AXIS_X, 0)));
+			break;
+		case 4:
+			projectionVector = glm::normalize(vector3(a_pOther->GetModelMatrix() * vector4(AXIS_Y, 0)));
+			break;
+		case 5:
+			projectionVector = glm::normalize(vector3(a_pOther->GetModelMatrix() * vector4(AXIS_Z, 0)));
+			break;
+		}
+
+		//get the corners of the creeper, find the max and min projections
+		vector3* objACorners = GetCorners();
+		float objAMin = glm::dot(objACorners[0],projectionVector);
+		float objAMax = objAMin;
+		for (size_t j = 1; j < 8; j++)
+		{
+			float proj = glm::dot(objACorners[j], projectionVector);
+			if (proj > objAMax) objAMax = proj;
+			else if (proj < objAMin) objAMin = proj;
+		}
+
+		//get the corners of steve, find the max and min projections
+		vector3* objBCorners = a_pOther->GetCorners();
+		float objBMin = glm::dot(objBCorners[0],projectionVector);
+		float objBMax = objBMin;
+		for (size_t j = 1; j < 8; j++)
+		{
+			float proj = glm::dot(objBCorners[j], projectionVector);
+			if (proj > objBMax) objBMax = proj;
+			else if (proj < objBMin) objBMin = proj;
+		}
+
+		//if there is a separation of a specific axis, return not 0
+		if (objAMin > objBMax || objAMax < objBMin) {
+			switch (i) {
+			case 0:
+				return eSATResults::SAT_AX;
+				break;
+			case 1:
+				return eSATResults::SAT_AY;
+				break;
+			case 2:
+				return eSATResults::SAT_AZ;
+				break;
+			case 3:
+				return eSATResults::SAT_BX;
+				break;
+			case 4:
+				return eSATResults::SAT_BX;
+				break;
+			case 5:
+				return eSATResults::SAT_BX;
+				break;
+			}
+		}
+	}
+	
+	//std::cout << "AXIS_X.x: " << creeperX.x << " AXIS_X.y: " << creeperX.y << " AXIS_X.z: " << creeperX.z << std::endl;
 
 	//there is no axis test that separates this two objects
 	return eSATResults::SAT_NONE;
