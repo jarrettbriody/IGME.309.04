@@ -12,6 +12,8 @@ Date: 2017/06
 
 #include "MyEntityManager.h"
 
+#include "MyOctant.h"
+
 namespace Simplex
 {
 	//Adding Application to the Simplex namespace
@@ -20,7 +22,8 @@ class Application
 	MyEntityManager* m_pEntityMngr = nullptr; //Entity Manager
 	uint m_uOctantID = -1; //Index of Octant to display
 	uint m_uObjects = 0; //Number of objects in the scene
-	uint m_uOctantLevels = 0; //Number of levels in the octree
+	uint m_uOctantLevels = 1; //Number of levels in the octree
+	MyOctant* octTree = nullptr;
 private:
 	String m_sProgrammer = "Alberto Bobadilla - labigm@rit.edu"; //programmer
 

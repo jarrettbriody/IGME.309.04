@@ -23,7 +23,7 @@ class MyOctant
 
 	float m_fSize = 0.0f; //Size of the octant
 
-	MeshManager* m_pMeshMngr = nullptr;//Mesh Manager singleton
+	MeshManager* m_pMeshMngr = nullptr; //Mesh Manager singleton
 	MyEntityManager* m_pEntityMngr = nullptr; //Entity Manager Singleton
 
 	vector3 m_v3Center = vector3(0.0f); //Will store the center point of the octant
@@ -55,7 +55,7 @@ public:
 	- float a_fSize -> size of each side of the octant volume
 	OUTPUT: class object
 	*/
-	MyOctant(vector3 a_v3Center, float a_fSize);
+	MyOctant(MyOctant* parent, vector3 a_v3Center, float a_fSize);
 	/*
 	USAGE: Copy Constructor
 	ARGUMENTS: class object to copy
@@ -184,7 +184,7 @@ public:
 	- uint a_nMaxLevel = 3 -> Sets the maximum level of the tree while constructing it
 	OUTPUT: ---
 	*/
-	void ConstructTree(uint a_nMaxLevel = 3);
+	void ConstructTree(MyOctant* current, uint a_nCurrentLevel, uint a_nMaxLevel = 3);
 	/*
 	USAGE: Traverse the tree up to the leafs and sets the objects in them to the index
 	ARGUMENTS: ---
@@ -198,6 +198,9 @@ public:
 	OUTPUT: ---
 	*/
 	uint GetOctantCount(void);
+
+	std::vector<MyOctant*> GetPopulatedLeaves(void);
+	std::vector<uint> GetEntityIndices(void);
 
 private:
 	/*
