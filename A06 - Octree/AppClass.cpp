@@ -29,8 +29,8 @@ void Application::InitVariables(void)
 			m_pEntityMngr->SetModelMatrix(m4Position);
 		}
 	}
-	m_uOctantLevels = 10;
-	m_pEntityMngr->Update();
+	m_uOctantLevels = 3;
+	//m_pEntityMngr->Update();
 	octTree = new MyOctant(m_uOctantLevels, 100);
 }
 void Application::Update(void)
@@ -45,20 +45,24 @@ void Application::Update(void)
 	CameraRotation();
 	
 	//Update Entity Manager
-	m_pEntityMngr->Update();
+	//m_pEntityMngr->Update();
 
+	
 	std::vector<MyOctant*> someLeaves = octTree->GetPopulatedLeaves();
 	for (int i = 0; i < someLeaves.size(); i++)
 	{
 		std::vector<uint> indices = someLeaves[i]->GetEntityIndices();
-		for (uint j = 0; j < indices.size() - 1; j++)
+		for (uint j = 0; j < indices.size(); j++)
 		{
-			for (uint k = j + 1; k < indices.size(); k++)
+			for (uint k = 0; k < indices.size(); k++)
 			{
-				m_pEntityMngr->GetEntity(indices[j])->IsColliding(m_pEntityMngr->GetEntity(indices[k]));
+				if (m_pEntityMngr->GetEntity(indices[j]) != m_pEntityMngr->GetEntity(indices[k])) {
+					m_pEntityMngr->GetEntity(indices[j])->IsColliding(m_pEntityMngr->GetEntity(indices[k]));
+				}
 			}
 		}
 	}
+	
 
 	//Add objects to render list
 	m_pEntityMngr->AddEntityToRenderList(-1, true);
@@ -69,7 +73,7 @@ void Application::Display(void)
 	ClearScreen();
 
 	//display octree
-	//octTree->Display(vector3(0.0f,0.0f,0.0f));
+	//octTree->Display();
 	
 	// draw a skybox
 	m_pMeshMngr->AddSkyboxToRenderList();

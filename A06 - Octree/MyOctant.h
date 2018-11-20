@@ -13,9 +13,10 @@ namespace Simplex
 //System Class
 class MyOctant
 {
-	static uint m_uOctantCount; //will store the number of octants instantiated
-	static uint m_uMaxLevel;//will store the maximum level an octant can go to
-	static uint m_uIdealEntityCount; //will tell how many ideal Entities this object will contain
+	//static uint m_uOctantCount; //will store the number of octants instantiated
+	//static uint m_uMaxLevel;//will store the maximum level an octant can go to
+	//static uint m_uIdealEntityCount; //will tell how many ideal Entities this object will contain
+	//static MyOctant* root;
 
 	uint m_uID = 0; //Will store the current ID for this octant
 	uint m_uLevel = 0; //Will store the current level of the octant
@@ -55,7 +56,7 @@ public:
 	- float a_fSize -> size of each side of the octant volume
 	OUTPUT: class object
 	*/
-	MyOctant(MyOctant* parent, vector3 a_v3Center, float a_fSize);
+	MyOctant(vector3 a_v3Center, float a_fSize);
 	/*
 	USAGE: Copy Constructor
 	ARGUMENTS: class object to copy
@@ -184,7 +185,7 @@ public:
 	- uint a_nMaxLevel = 3 -> Sets the maximum level of the tree while constructing it
 	OUTPUT: ---
 	*/
-	void ConstructTree(MyOctant* current, uint a_nCurrentLevel, uint a_nMaxLevel = 3);
+	void ConstructTree(uint a_nMaxLevel = 3);
 	/*
 	USAGE: Traverse the tree up to the leafs and sets the objects in them to the index
 	ARGUMENTS: ---
