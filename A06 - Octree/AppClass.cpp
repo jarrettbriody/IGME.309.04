@@ -45,7 +45,7 @@ void Application::Update(void)
 	CameraRotation();
 	
 	//Update Entity Manager
-	//m_pEntityMngr->Update();
+	m_pEntityMngr->Update();
 
 	
 	std::vector<MyOctant*> someLeaves = octTree->GetPopulatedLeaves();
